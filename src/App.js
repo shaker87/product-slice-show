@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Product from "./Product";
+export const data = [
+  { name: 'Product A', price: 300 },
+  { name: 'Product B', price: 700 },
+  { name: 'Product C', price: 400 },
+  { name: 'Product D', price: 500 },
+  { name: 'Product E', price: 600 },
+  { name: 'Product F', price: 800 },
+  { name: 'Product G', price: 900 },
+  { name: 'Product H', price: 200 }
+];
 
-function App() {
+
+const productPerPage = 3;
+let arrayForHoldingProduct = [];
+
+const App = () => {
+  const [productToShow, setProductToShow] = useState([]);
+  const [next, setNext] = useState(3);
+
+  const loopWithSlice = (start, end) => {
+    const slicedProduct = data.slice(start, end);
+    arrayForHoldingProduct = [...arrayForHoldingProduct, ...slicedProduct];
+    setProductToShow(arrayForHoldingProduct);
+  };
+
+  useEffect(() => {
+    loopWithSlice(0, productPerPage);
+  }, []);
+
+  const handleShowMoreProduct = () => {
+    loopWithSlice(next, next + productPerPage);
+    setNext(next + productPerPage);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Product product={productToShow}></Product>
+        <button onClick={handleShowMoreProduct}>View more</button>
     </div>
   );
-}
+};
 
 export default App;
+
+
